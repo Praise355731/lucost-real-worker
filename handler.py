@@ -117,6 +117,7 @@ def handler(job):
     job_id = inp.get("job_id", "test")
     part = int(inp.get("chunk_index", 0))
     try:
+        models.ensure_ready()
         with tempfile.TemporaryDirectory() as tmp:
             path = build_part(inp, tmp)
             key = f"parts/{job_id}/part{part}.mp4"
@@ -128,3 +129,4 @@ def handler(job):
 
 if __name__ == "__main__":
     runpod.serverless.start({"handler": handler})
+  
