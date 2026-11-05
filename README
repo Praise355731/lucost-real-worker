@@ -1,0 +1,18 @@
+# LUCOST AI real worker (not yet able to make AI video)
+
+This is the real worker's structure: it reads the job, splits nothing itself (the app splits the script),
+builds each spoken line with the voice and face models, joins the lines, uploads the part to R2, and returns video_url.
+
+## Status
+- **Voice, face, and lip-sync models: not chosen.** Each stage raises ModelNotConfigured, so a job returns
+  a clear error instead of a fake video. Nothing is faked.
+- **Licences:** a model is only plugged in after its licence allows commercial use. Check each one first.
+
+## Plugging in a model (after the licence check)
+1. Set VOICE_MODEL, FACE_MODEL, LIPSYNC_MODEL in RunPod's environment variables.
+2. Implement that model's call in models.py (synthesize_speech / animate_face).
+3. Test one 30-second scene and measure GPU time, then update config.py.
+
+## Deploy
+Same as the test worker: its own repository, with Dockerfile, handler.py, models.py, requirements.txt.
+Set R2_ACCOUNT_ID, R2_ACCESS_KEY, R2_SECRET_KEY, R2_BUCKET, R2_PUBLIC_URL in RunPod.
