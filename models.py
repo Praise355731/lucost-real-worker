@@ -17,6 +17,14 @@ FACE_MODEL = os.getenv("FACE_MODEL", "")            # e.g. "pulid" once its lice
 LIPSYNC_MODEL = os.getenv("LIPSYNC_MODEL", "")      # e.g. "musetalk" once its licence is confirmed
 
 
+def ensure_ready():
+    """Checked before any download, so a job with no model chosen fails at once with a clear reason."""
+    if not VOICE_MODEL:
+        raise ModelNotConfigured("Voice model not chosen yet. Its licence must allow commercial use first.")
+    if not FACE_MODEL or not LIPSYNC_MODEL:
+        raise ModelNotConfigured("Face and lip-sync models not chosen yet. Their licences must allow commercial use first.")
+
+
 def synthesize_speech(text: str, voice_snippet_path: str, language: str, out_wav: str) -> str:
     """Speak `text` in the voice of `voice_snippet_path` and write a WAV file to `out_wav`."""
     if not VOICE_MODEL:
